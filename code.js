@@ -21,21 +21,25 @@ var drawHistogram=function(data){
 
   var datapoint=getQuizeArray(data,date)
 
-  var screen={width:800,height:400};
-  var margin = {top: 20, right: 10, bottom: 20, left: 30};
+  var screen={width:600,height:400};
+  var margin = {top: 20, right: 10, bottom: 20, left: 20};
   var h=screen.height-margin.top-margin.bottom
   var w=screen.width-margin.right-margin.left
 
+//scale
+   var xScale= d3.scaleLinear()
+      .domain([0,10])
+      .nice()
+      .range([margin.left,w+margin.left]);
+   var yScale=d3.scaleLinear()
+       .domain([0,23])
+       .range([h,margin.top])
+       .nice();
+   var colors=d3.scaleOrdinal()
+   .domain([0,10])
+   .range(["#64A38A","#82A176","#A6C48A","#AFD3A2",'#94CEAF'])
 
-    var xScale= d3.scaleLinear()
-        .domain(d3.extent(datapoint))
-        .nice()
-        .range([0,w ]);
-     var yScale=d3.scaleLinear()
-         .domain([0,23])
-         .range([h+margin.top,margin.top])
-         .nice();
-
+// bins
     var binMaker=d3.histogram()
     .domain(xScale.domain())
     .thresholds(xScale.ticks(10))
@@ -43,14 +47,15 @@ var drawHistogram=function(data){
      var bins=binMaker(datapoint)
      console.log(bins)
 
-
+// draw rects
   var svg=d3.select("body").append("svg")
   .attr('width', screen.width)
   .attr('height', screen.height)
 
+
   var plot=svg.append("g")
   .attr('id', 'chart')
-  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+  .attr('transform', 'translate(' + margin.left + ',' + margin.top+ ')')
 
   plot.selectAll("rect")
   .data(bins)
@@ -60,22 +65,25 @@ var drawHistogram=function(data){
     return xScale(d.x0)
   })
   .attr('width', function(d){
-    return xScale(d.x1-0.1)-xScale(d.x0)
+    return xScale(d.x1-0.5-d.x0)
   })
-  .attr('y', function(d){return yScale(d)})
+  .attr('y', function(d){
+    console.log(yScale(d.length))
+    return yScale(d.length)})
   .attr('height', function(d){
-    return h-yScale(d)
+    return h-yScale(d.length)
   })
-  .attr('fill', "orange")
+  .attr('fill', function(d,i){return colors(i)})
 
 
+// axis
   var yAxis=d3.axisLeft(yScale)
   .tickSize(0)
   svg.append("g")
   .attr('class', 'yAxis')
   .call(yAxis)
-  .attr('transform', 'translate(' + (margin.left/1.5) + ',0)')
-
+  .attr('transform', 'translate(' + 15 + ',' + margin.top + ')')
+  
 
 
 }
