@@ -151,8 +151,8 @@ var drawHistogram=function(data){
 //timeline
 
 var circle=d3.select("body").append("svg")
-.attr('width', 600)
-.attr('height', 350)
+.attr('width', 530)
+.attr('height', 320)
 .attr('id', 'circle')
 
 circle.append("svg:image")
