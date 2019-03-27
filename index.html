@@ -3,7 +3,11 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <link rel="stylesheet" href="css.css">
   <style media="screen">
+@import url('https://fonts.googleapis.com/css?family=Baloo+Chettan|ZCOOL+XiaoWei');
 
+body{
+  font-family: 'ZCOOL XiaoWei', serif;
+}
 #chart{
   position: absolute;
       top: 150px;
@@ -14,6 +18,7 @@
   position: absolute;
 top: 200px;
 left:0px;
+font-family: 'Baloo Chettan', cursive;
 }
 
 #circle{
@@ -42,14 +47,24 @@ pointer-events: none;
     text-decoration: underline;
 }
 #day15,#day30,#day41{
-  fill:gray;
+  fill:#B5B5B5;
+}
+.explain{
+  left: 30px;
+position: absolute;
+line-height: 40px;
 }
 
 
   </style>
 </head>
 <body>
-
+<div class="explain">
+  <ul>
+    <li>Click the Calendar to see the specific day</li>
+    <li>Dates that are gray don't have quize</li>
+  </ul>
+</div>
 
 </body>
 <script type="text/javascript" src="code.js"></script>
