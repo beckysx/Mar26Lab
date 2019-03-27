@@ -552,13 +552,6 @@ time6.selectAll("text").data(d3.range(6))
 
 })
 
-
-
-
-
-
-
-
 }
 
 
