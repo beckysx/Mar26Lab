@@ -132,11 +132,12 @@ var drawHistogram=function(data){
   .text("Date")
   .style('font-size', 25)
 
-  d3.select("body").select("#chart").append("g").selectAll("text")
+  d3.select("body").select("#chart").append("g")
+  .attr('id', 'scorelabel')
+  .selectAll("text")
   .data(bins)
   .enter()
   .append("text")
-  .attr('id', 'scorelabel')
   .attr('x', function(d){
     return xScale(d.x1)+(xScale(d.x1-0.3)-xScale(d.x0))
   })
@@ -150,8 +151,8 @@ var drawHistogram=function(data){
 //timeline
 
 var circle=d3.select("body").append("svg")
-.attr('width', 400)
-.attr('height', 500)
+.attr('width', 600)
+.attr('height', 350)
 .attr('id', 'circle')
 
 circle.append("svg:image")
@@ -180,70 +181,19 @@ time1.selectAll("text").data(times)
 .attr('y',30)
 .attr('id',function(d){return "day"+(d+1)} )
 .text(function(d){return d+1})
-
-var time2=timeline.append("g").attr('id', 'time1')
-
-time2.selectAll("text").data(times)
-.enter()
-.append("text")
-.attr('x', function(d,i){
-  return timeScale(i)})
-.attr('y',80)
-.attr('id',function(d){return "day"+(d+8)} )
-.text(function(d){return d+8})
-
-var time3=timeline.append("g").attr('id', 'time1')
-
-time3.selectAll("text").data(times)
-.enter()
-.append("text")
-.attr('x', function(d,i){
-  return timeScale(i)})
-.attr('y',130)
-.attr('id',function(d){return "day"+(d+15)} )
-.text(function(d){return d+15})
-
-var time4=timeline.append("g").attr('id', 'time1')
-
-time4.selectAll("text").data(times)
-.enter()
-.append("text")
-.attr('x', function(d,i){
-  return timeScale(i)})
-.attr('y',180)
-.attr('id',function(d){return "day"+(d+22)} )
-.text(function(d){return d+22})
-
-var time5=timeline.append("g").attr('id', 'time1')
-
-time5.selectAll("text").data(times)
-.enter()
-.append("text")
-.attr('x', function(d,i){
-  return timeScale(i)})
-.attr('y',230)
-.attr('id',function(d){return "day"+(d+29)} )
-.text(function(d){return d+29})
-
-var time6=timeline.append("g").attr('id', 'time1')
-
-time6.selectAll("text").data(d3.range(6))
-.enter()
-.append("text")
-.attr('x', function(d,i){
-  return timeScale(i)})
-.attr('y',270)
-.attr('id',function(d){return "day"+(d+36)} )
-.text(function(d){return d+36})
-
-
-
-
-/*.on("click",function(){
+.on("click",function(){
+  //date change
+  var previousdate=date
   date=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  if(date==15|| date==30 || date==41){
+    date=previousdate
+  }
+  else{date=date}
+
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
 
+  // rects
   d3.select("#chart").selectAll("rect")
   .data(bins)
   .transition()
@@ -256,7 +206,356 @@ time6.selectAll("text").data(d3.range(6))
   })
   .attr('fill', function(d,i){return colors(i)})
 
-})*/
+  // timeline
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  d3.select("body").select("#circle").select("#actualImage")
+  .transition()
+  .duration(200)
+  .attr('x', cx)
+  .attr('y', cy)
+
+  //label
+  d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)+5})
+  .text(function(d){
+    if (d.length>0){return d.length}
+    })
+
+})
+
+var time2=timeline.append("g").attr('id', 'time2')
+
+time2.selectAll("text").data(times)
+.enter()
+.append("text")
+.attr('x', function(d,i){
+  return timeScale(i)})
+.attr('y',80)
+.attr('id',function(d){return "day"+(d+8)} )
+.text(function(d){return d+8})
+.on("click",function(){
+  //date change
+  var previousdate=date
+  date=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  if(date==15|| date==30 || date==41){
+    date=previousdate
+  }
+  else{date=date}
+
+  var datapoint=getQuizeArray(data,date)
+  var bins=binMaker(datapoint)
+
+  // rects
+  d3.select("#chart").selectAll("rect")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)})
+  .attr('height', function(d){
+    return h-yScale(d.length)
+  })
+  .attr('fill', function(d,i){return colors(i)})
+
+  // timeline
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  d3.select("body").select("#circle").select("#actualImage")
+  .transition()
+  .duration(200)
+  .attr('x', cx)
+  .attr('y', cy)
+
+  //label
+  d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)+5})
+  .text(function(d){
+    if (d.length>0){return d.length}
+    })
+
+})
+
+var time3=timeline.append("g").attr('id', 'time3')
+
+time3.selectAll("text").data(times)
+.enter()
+.append("text")
+.attr('x', function(d,i){
+  return timeScale(i)})
+.attr('y',130)
+.attr('id',function(d){return "day"+(d+15)} )
+.text(function(d){return d+15})
+.on("click",function(){
+  //date change
+  var previousdate=date
+  date=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  if(date==15|| date==30 || date==41){
+    date=previousdate
+  }
+  else{date=date}
+
+  var datapoint=getQuizeArray(data,date)
+  var bins=binMaker(datapoint)
+
+  // rects
+  d3.select("#chart").selectAll("rect")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)})
+  .attr('height', function(d){
+    return h-yScale(d.length)
+  })
+  .attr('fill', function(d,i){return colors(i)})
+
+  // timeline
+  var compare=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  var pcx=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('x'))
+  var pcy=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('y'))
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  if(compare==15|| compare==30 || compare==41){
+    cx=pcx
+    cy=pcy
+  }
+  else{
+    cx=cx
+    cy=cy
+  }
+  d3.select("body").select("#circle").select("#actualImage")
+  .transition()
+  .duration(200)
+  .attr('x', cx)
+  .attr('y', cy)
+
+  //label
+  d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)+5})
+  .text(function(d){
+    if (d.length>0){return d.length}
+    })
+
+})
+
+var time4=timeline.append("g").attr('id', 'time4')
+
+time4.selectAll("text").data(times)
+.enter()
+.append("text")
+.attr('x', function(d,i){
+  return timeScale(i)})
+.attr('y',180)
+.attr('id',function(d){return "day"+(d+22)} )
+.text(function(d){return d+22})
+.on("click",function(){
+  //date change
+  var previousdate=date
+  date=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  if(date==15|| date==30 || date==41){
+    date=previousdate
+  }
+  else{date=date}
+
+  var datapoint=getQuizeArray(data,date)
+  var bins=binMaker(datapoint)
+
+  // rects
+  d3.select("#chart").selectAll("rect")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)})
+  .attr('height', function(d){
+    return h-yScale(d.length)
+  })
+  .attr('fill', function(d,i){return colors(i)})
+
+  // timeline
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  d3.select("body").select("#circle").select("#actualImage")
+  .transition()
+  .duration(200)
+  .attr('x', cx)
+  .attr('y', cy)
+
+  //label
+  d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)+5})
+  .text(function(d){
+    if (d.length>0){return d.length}
+    })
+
+})
+
+var time5=timeline.append("g").attr('id', 'time5')
+
+time5.selectAll("text").data(times)
+.enter()
+.append("text")
+.attr('x', function(d,i){
+  return timeScale(i)})
+.attr('y',230)
+.attr('id',function(d){return "day"+(d+29)} )
+.text(function(d){return d+29})
+.on("click",function(){
+  //date change
+  var previousdate=date
+  date=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  if(date==15|| date==30 || date==41){
+    date=previousdate
+  }
+  else{date=date}
+
+  var datapoint=getQuizeArray(data,date)
+  var bins=binMaker(datapoint)
+
+  // rects
+  d3.select("#chart").selectAll("rect")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)})
+  .attr('height', function(d){
+    return h-yScale(d.length)
+  })
+  .attr('fill', function(d,i){return colors(i)})
+
+  // timeline
+  var compare=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  var pcx=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('x'))
+  var pcy=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('y'))
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  if(compare==15|| compare==30 || compare==41){
+    cx=pcx
+    cy=pcy
+  }
+  else{
+    cx=cx
+    cy=cy
+  }
+  d3.select("body").select("#circle").select("#actualImage")
+  .transition()
+  .duration(200)
+  .attr('x', cx)
+  .attr('y', cy)
+
+    //label
+    d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
+    .data(bins)
+    .transition()
+    .ease(d3.easeBounce)
+    .duration(200)
+    .attr('y', function(d){
+      return yScale(d.length)+5})
+    .text(function(d){
+      if (d.length>0){return d.length}
+      })
+
+})
+
+var time6=timeline.append("g").attr('id', 'time6')
+
+time6.selectAll("text").data(d3.range(6))
+.enter()
+.append("text")
+.attr('x', function(d,i){
+  return timeScale(i)})
+.attr('y',270)
+.attr('id',function(d){return "day"+(d+36)} )
+.text(function(d){return d+36})
+.on("click",function(){
+  //date change
+  var previousdate=date
+  date=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  if(date==15|| date==30 || date==41){
+    date=previousdate
+  }
+  else{date=date}
+
+  var datapoint=getQuizeArray(data,date)
+  var bins=binMaker(datapoint)
+
+  // rects
+  d3.select("#chart").selectAll("rect")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)})
+  .attr('height', function(d){
+    return h-yScale(d.length)
+  })
+  .attr('fill', function(d,i){return colors(i)})
+
+  // timeline
+  var compare=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
+  var pcx=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('x'))
+  var pcy=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('y'))
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  if(compare==15|| compare==30 || compare==41){
+    cx=pcx
+    cy=pcy
+  }
+  else{
+    cx=cx
+    cy=cy
+  }
+  d3.select("body").select("#circle").select("#actualImage")
+  .transition()
+  .duration(200)
+  .attr('x', cx)
+  .attr('y', cy)
+
+  //label
+  d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
+  .data(bins)
+  .transition()
+  .ease(d3.easeBounce)
+  .duration(200)
+  .attr('y', function(d){
+    return yScale(d.length)+5})
+  .text(function(d){
+    if (d.length>0){return d.length}
+    })
+
+})
+
+
+
+
+
 
 
 
