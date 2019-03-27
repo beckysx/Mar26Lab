@@ -324,17 +324,23 @@ time3.selectAll("text").data(times)
 
   // timeline
   var compare=parseInt(d3.select(this).attr("id").replace(/[^0-9]/ig,""))
-  var pcx=parseInt(d3.select("#actualImage").attr('x'))
-  var pcy=parseInt(d3.select("#actualImage").attr('y'))
+  var pcx=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('x'))
+  var pcy=parseInt(d3.select("body").select("#circle").select("#actualImage").attr('y'))
+  var cx=parseInt(d3.select(this).attr('x'))-32
+  var cy=parseInt(d3.select(this).attr('y'))-25
+  if(compare==15|| compare==30 || compare==41){
+    cx=pcx
+    cy=pcy
+  }
+  else{
+    cx=cx
+    cy=cy
+  }
   d3.select("body").select("#circle").select("#actualImage")
   .transition()
   .duration(200)
-  .attr('x', function(compare,pcx){
-    if(compare==15|| compare==30 || compare==41){return pcx}
-    else {return parseInt(d3.select(this).attr('x'))-32}})
-  .attr('y', function(compare,pcy){
-    if(compare==15|| compare==30 || compare==41){return pcy}
-    else {return parseInt(d3.select(this).attr('y'))-25}})
+  .attr('x', cx)
+  .attr('y', cy)
 
   //label
   d3.select("body").select("#chart").select("#scorelabel").selectAll("text")
