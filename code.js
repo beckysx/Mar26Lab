@@ -15,24 +15,38 @@ var getQuizeArray=function(d,date){
 
 var drawHistogram=function(data){
 
-  var date=1
-
-  var datapoint=getQuizeArray(data,date)
-
   var screen={width:650,height:420};
   var margin = {top: 20, right: 10, bottom: 40, left: 70};
   var h=screen.height-margin.top-margin.bottom
   var w=screen.width-margin.right-margin.left
 
+
+
+  // bins
+
+  var date=1
+
+  var datapoint=getQuizeArray(data,date)
+
+  var xScale= d3.scaleLinear()
+     .domain([0,11])
+     .nice()
+     .range([0,w]);
+
+  var binMaker=d3.histogram()
+  .domain(xScale.domain())
+  .thresholds(xScale.ticks(11))
+
+   var bins=binMaker(datapoint)
+
+
 //scale
-   var xScale= d3.scaleLinear()
-      .domain([0,11])
-      .nice()
-      .range([0,w]);
+
    var yScale=d3.scaleLinear()
-       .domain([0,23])
+       .domain([0,d3.max(bins,function(d){return d.length})])
        .range([h,margin.top])
        .nice();
+
    var colors=d3.scaleOrdinal()
    .domain([0,10])
    .range(["#64A38A","#82A176","#A6C48A","#AFD3A2",'#94CEAF'])
@@ -40,13 +54,6 @@ var drawHistogram=function(data){
    var timeScale= d3.scaleLinear()
       .domain([0,5])
       .range([70,400]);
-
-// bins
-    var binMaker=d3.histogram()
-    .domain(xScale.domain())
-    .thresholds(xScale.ticks(11))
-
-     var bins=binMaker(datapoint)
 
 
 // draw rects
@@ -79,7 +86,9 @@ var drawHistogram=function(data){
 
 // axis
   var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
   .tickSize(0)
+
   svg.append("g")
   .attr('id', 'yAxis')
   .call(yAxis)
@@ -193,6 +202,22 @@ time1.selectAll("text").data(times)
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
 
+  var yScale=d3.scaleLinear()
+      .domain([0,d3.max(bins,function(d){return d.length})])
+      .range([h,margin.top])
+      .nice();
+
+  var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
+  .tickSize(0)
+
+  svg.select("#yAxis")
+  .transition()
+  .duration(500)
+  .call(yAxis)
+
+
+
   // rects
   d3.select("#chart").selectAll("rect")
   .data(bins)
@@ -251,6 +276,20 @@ time2.selectAll("text").data(times)
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
 
+  var yScale=d3.scaleLinear()
+      .domain([0,d3.max(bins,function(d){return d.length})])
+      .range([h,margin.top])
+      .nice();
+
+  var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
+  .tickSize(0)
+
+  svg.select("#yAxis")
+  .transition()
+  .duration(500)
+  .call(yAxis)
+
   // rects
   d3.select("#chart").selectAll("rect")
   .data(bins)
@@ -308,6 +347,20 @@ time3.selectAll("text").data(times)
 
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
+
+  var yScale=d3.scaleLinear()
+      .domain([0,d3.max(bins,function(d){return d.length})])
+      .range([h,margin.top])
+      .nice();
+
+  var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
+  .tickSize(0)
+
+  svg.select("#yAxis")
+  .transition()
+  .duration(500)
+  .call(yAxis)
 
   // rects
   d3.select("#chart").selectAll("rect")
@@ -378,6 +431,20 @@ time4.selectAll("text").data(times)
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
 
+  var yScale=d3.scaleLinear()
+      .domain([0,d3.max(bins,function(d){return d.length})])
+      .range([h,margin.top])
+      .nice();
+
+  var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
+  .tickSize(0)
+
+  svg.select("#yAxis")
+  .transition()
+  .duration(500)
+  .call(yAxis)
+
   // rects
   d3.select("#chart").selectAll("rect")
   .data(bins)
@@ -435,6 +502,20 @@ time5.selectAll("text").data(times)
 
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
+
+  var yScale=d3.scaleLinear()
+      .domain([0,d3.max(bins,function(d){return d.length})])
+      .range([h,margin.top])
+      .nice();
+
+  var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
+  .tickSize(0)
+
+  svg.select("#yAxis")
+  .transition()
+  .duration(500)
+  .call(yAxis)
 
   // rects
   d3.select("#chart").selectAll("rect")
@@ -504,6 +585,20 @@ time6.selectAll("text").data(d3.range(6))
 
   var datapoint=getQuizeArray(data,date)
   var bins=binMaker(datapoint)
+
+  var yScale=d3.scaleLinear()
+      .domain([0,d3.max(bins,function(d){return d.length})])
+      .range([h,margin.top])
+      .nice();
+
+  var yAxis=d3.axisLeft(yScale)
+  .ticks(d3.max(bins,function(d){return d.length}))
+  .tickSize(0)
+
+  svg.select("#yAxis")
+  .transition()
+  .duration(500)
+  .call(yAxis)
 
   // rects
   d3.select("#chart").selectAll("rect")
